@@ -144,7 +144,6 @@ void* avg(void* arg){
 void* sum(void* arg){
 	DONNEE* f = (DONNEE*)arg;
 	char* tbuf = malloc(sizeof(char));
-	float maxou,minou;
 	
 	pthread_mutex_lock(&mutex);
 	int i=0;
@@ -152,7 +151,7 @@ void* sum(void* arg){
 	read(f->fichier,tbuf,1);
 	
 	if(f->first)
-	{//Bloc pour initialiser la varibale 
+	{//Bloc pour initialiser la varibale
 		char* buf = (char*)malloc(sizeof(char));
 		while(*tbuf!='\n'){
 			buf=strcat(buf,tbuf);
@@ -167,18 +166,14 @@ void* sum(void* arg){
 		f->first=0;
 	}
 	
-	while(i<f->nombre && *tbuf!='\0')
+		while(i<f->nombre && *tbuf!='\0')
 	{
 		char* buf = (char*)malloc(sizeof(char));
 		while(*tbuf!='\n' && *tbuf!='\0'){
 			buf=strcat(buf,tbuf);
 			read(f->fichier,tbuf,1);
 		}
-		maxou = maximum(f->valeur,atof(buf));
-		minou = minimum(f->valeur,atof(buf));
-		
-		f->valeur = (maxou + minou)/2;
-		
+		f->valeur = f->valeur + atof(buf);
 		read(f->fichier,tbuf,1);
 		free(buf);
 		i++;
